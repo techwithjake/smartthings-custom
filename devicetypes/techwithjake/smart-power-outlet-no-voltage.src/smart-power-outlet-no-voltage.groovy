@@ -24,7 +24,7 @@
  */
 metadata {
 	// Automatically generated. Make future change here.
-	definition (name: "SmartPower Outlet No Power Meter", namespace: "techwithjake", author: "TechWithJake") {
+	definition (name: "Smart Power Outlet No Voltage", namespace: "techwithjake", author: "TechWithJake") {
 		capability "Actuator"
 		capability "Switch"
 		// capability "Power Meter"
