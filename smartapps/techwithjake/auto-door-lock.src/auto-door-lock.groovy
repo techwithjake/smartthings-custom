@@ -12,15 +12,19 @@ preferences{
     section("Select the door lock:") {
         input "lock1", "capability.lock", required: true
     }
+    section("Automatically lock the door when unlocked...") {
+        input "minutesLater1", "number", title: "Delay (in minutes):", required: true
+    }
     section("Select the door contact sensor:") {
-        input "contact", "capability.contactSensor", required: true
+        input "contact", "capability.contactSensor", required: false
     }
     section("Automatically lock the door when closed...") {
-        input "minutesLater", "number", title: "Delay (in minutes):", required: true
+        input "minutesLater2", "number", title: "Delay (in minutes) > 0:", required: false
     }
     section( "Notifications" ) {
         input("recipients", "contact", title: "Send notifications to", required: false) {
             input "phoneNumber", "phone", title: "Warn with text message (optional)", description: "Phone Number", required: false
+            // input "pushAndPhone", "enum", title: "Notify me via Push Notification", required: false, options: ["Yes", "No"]
         }
     }
 }
@@ -47,28 +51,32 @@ def lockDoor(){
     if(location.contactBookEnabled) {
         if ( recipients ) {
             log.debug ( "Sending Push Notification..." )
-            sendNotificationToContacts( "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!", recipients)
+            sendNotificationToContacts( "${lock1} LOCKED after ${contact} was closed for ${minutesLater2} minutes or it was unlocked for ${minutesLater1} minutes!", recipients)
         }
     }
     if (phoneNumber) {
         log.debug("Sending text message...")
-        sendSms( phoneNumber, "${lock1} locked after ${contact} was closed for ${minutesLater} minutes!")
+        sendSms( phoneNumber, "${lock1} LOCKED after ${contact} was closed for ${minutesLater2} minutes or it was unlocked for ${minutesLater1} minutes!")
     }
 }
 
 def doorHandler(evt){
-    if ((contact.latestValue("contact") == "open") && (evt.value == "unlocked")) { // If the door is open and a person unlocks it then...
-        unschedule( unlockDoor ) // ...we don't need to unlock it later.
+    if ((lock1.latestValue("lock") == "unlocked") && (evt.value == "unlocked")) { // If a person unlocks a locked door...
+      //def delay = (minutesLater * 60) // runIn uses seconds
+        runIn( (minutesLater1 * 60), lockDoor ) // ...schedule (in minutes) to lock.
     }
-    else if ((contact.latestValue("contact") == "closed") && (evt.value == "locked")) { // If the door is closed and a person manually locks it then...
+    else if ((lock1.latestValue("lock") == "locked") && (evt.value == "locked")) { // If a person manually locks it then...
+        unschedule( lockDoor ) // ...we don't need to lock it later.
+    }
+    if ((contact.latestValue("contact") == "closed") && (evt.value == "locked")) { // If the door is closed and a person manually locks it then...
         unschedule( lockDoor ) // ...we don't need to lock it later.
     }
     else if ((contact.latestValue("contact") == "closed") && (evt.value == "unlocked")) { // If the door is closed and a person unlocks it then...
        //def delay = (minutesLater * 60) // runIn uses seconds
-        runIn( (minutesLater * 60), lockDoor ) // ...schedule (in minutes) to lock.
+        runIn( (minutesLater2 * 60), lockDoor ) // ...schedule (in minutes) to lock.
     }
     else if ((lock1.latestValue("lock") == "unlocked") && (evt.value == "closed")) { // If a person closes an unlocked door...
         //def delay = (minutesLater * 60) // runIn uses seconds
-        runIn( (minutesLater * 60), lockDoor ) // ...schedule (in minutes) to lock.
+        runIn( (minutesLater2 * 60), lockDoor ) // ...schedule (in minutes) to lock.
     }
 }
