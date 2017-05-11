@@ -24,7 +24,7 @@ preferences{
     section( "Notifications" ) {
         input("recipients", "contact", title: "Send notifications to", required: false) {
             input "phoneNumber", "phone", title: "Warn with text message (optional)", description: "Phone Number", required: false
-            // input "pushAndPhone", "enum", title: "Notify me via Push Notification", required: false, options: ["Yes", "No"]
+            input "pushNotification", "bool", title: "Push notification", required: false, defaultValue: "false"
         }
     }
 }
@@ -58,6 +58,10 @@ def lockDoor(){
         log.debug("Sending text message...")
         sendSms( phoneNumber, "${lock1} LOCKED after ${contact} was closed for ${minutesLater2} minutes or it was unlocked for ${minutesLater1} minutes!")
     }
+    if (pushNotification) {
+        log.debug("Sending push notification...")
+        sendPush("${lock1} LOCKED after ${contact} was closed for ${minutesLater2} minutes or it was unlocked for ${minutesLater1} minutes!")
+      }
 }
 
 def doorHandler(evt){
