@@ -9,11 +9,11 @@ definition(
 )
 
 preferences{
-	page(name: "appSetup")
+	page(name: "appSetup", install: true, uninstall: true)
 }
 
 def appSetup() {
-dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true, uninstall: true) {
+dynamicPage(name: "appSetup", title: "Auto Lock Setup") {
 		section("Select the door lock:") {
 			input "lock1", "capability.lock", required: true
 		}
