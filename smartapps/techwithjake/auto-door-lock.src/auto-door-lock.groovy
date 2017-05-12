@@ -13,7 +13,7 @@ preferences{
 }
 
 def appSetup() {
-dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
+dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true, uninstall: true) {
 		section("Select the door lock:") {
 			input "lock1", "capability.lock", required: true
 		}
