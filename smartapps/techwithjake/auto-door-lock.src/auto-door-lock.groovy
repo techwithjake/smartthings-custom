@@ -25,7 +25,7 @@
 definition(
     name: "Auto Lock Door",
     namespace: "techwithjake",
-    author: "Tech With Jake",
+    author: "Arnaud, TechWithJake, NateBentley",
     description: "Automatically locks a specific door after X minutes when closed.",
     category: "My Apps",
     iconUrl: "http://www.gharexpert.com/mid/4142010105208.jpg",
