@@ -45,7 +45,7 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup") {
 			input "minutesLater1", "number", title: "Delay (in minutes):", required: true
 		}
     if (minutesLater1 == 0) {
-        section ("Warning 0") {
+        section ("Warning! 0 Minutes is strongly discouraged.") {
         paragraph "If you set this value to zero, the door will lock itself whenever you try to unlock."
       }
     }
@@ -58,7 +58,7 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup") {
 			}
 		}
     if (minutesLater1 == 0) {
-        section ("Warning 0") {
+        section ("Warning! 0 Minutes is strongly discouraged.") {
         paragraph "If you set this value to zero, the door will lock itself whenever you try to unlock and open it."
       }
     }
