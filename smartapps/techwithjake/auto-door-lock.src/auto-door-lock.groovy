@@ -18,8 +18,13 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
 			input "lock1", "capability.lock", required: true
 		}
 		section("Automatically lock the door when unlocked...") {
-			input "minutesLater1", "number", title: "Lock delay when unlocked for (in minutes):", required: true
+			input "minutesLater1", "number", title: "Delay (in minutes):", required: true
 		}
+    if (minutesLater1 == 0) {
+        section ("Warning 0") {
+        paragraph "If you set this value to zero, the door will lock itself whenever you try to unlock."
+      }
+    }
 		section("Select the door contact sensor:") {
 			input "contact", "capability.contactSensor", required: false, submitOnChange: true
 		}
@@ -28,12 +33,20 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
 				input "minutesLater2", "number", title: "Lock delay when closed for (in minutes) > 0:", required: true
 			}
 		}
-		section( "Notifications" ) {
+    if (minutesLater1 == 0) {
+        section ("Warning 0") {
+        paragraph "If you set this value to zero, the door will lock itself whenever you try to unlock and open it."
+      }
+    }
+		section("Notifications") {
 			input("recipients", "contact", title: "Send notifications to", required: false) {
-				input "phoneNumber", "phone", title: "Warn with text message (optional)", description: "Phone Number", required: false
-				input "pushNotification", "bool", title: "Push notification", required: false, defaultValue: "false"
+				input "phoneNumber", "phone", title: "Send Text Message to", description: "Phone Number", required: false
+				input "pushNotification", "bool", title: "Send Push Notification", defaultValue: "false", required: false
 			}
 		}
+    section("Modes"){
+      input "modes", "mode", title: "Select a Mode(s)", multiple: true, required: false
+    }
 	}
 }
 
@@ -70,6 +83,10 @@ def lockDoor(){
         log.debug("Sending push notification...")
         sendPush("${lock1} LOCKED after ${contact} was closed for ${minutesLater2} minutes or it was unlocked for ${minutesLater1} minutes!")
       }
+    else {
+ 			  log.debug 'Sending nothing'
+ 			  options.method = 'none'
+ 		  }
 }
 
 def doorHandler(evt){
