@@ -30,7 +30,7 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
 		}
 		if (contact != null) {
 			section("Automatically lock the door when closed...") {
-				input "minutesLater2", "number", title: "Lock delay when closed for (in minutes) > 0:", required: true
+				input "minutesLater2", "number", title: "Delay (in minutes):", required: true
 			}
 		}
     if (minutesLater1 == 0) {
@@ -44,9 +44,9 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
 				input "pushNotification", "bool", title: "Send Push Notification", defaultValue: "false", required: false
 			}
 		}
-//    section("Modes"){
-//      input "modes", "mode", title: "Select a Mode(s)", multiple: true, required: false
-//    }
+    section("Modes"){
+      mode(title: "Select a Mode(s)", multiple: true, required: false)
+    }
 	}
 }
 
