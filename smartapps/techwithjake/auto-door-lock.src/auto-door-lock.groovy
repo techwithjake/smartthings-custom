@@ -9,24 +9,32 @@ definition(
 )
 
 preferences{
-    section("Select the door lock:") {
-        input "lock1", "capability.lock", required: true
-    }
-    section("Automatically lock the door when unlocked...") {
-        input "minutesLater1", "number", title: "Delay (in minutes):", required: true
-    }
-    section("Select the door contact sensor:") {
-        input "contact", "capability.contactSensor", required: false
-    }
-    section("Automatically lock the door when closed...") {
-        input "minutesLater2", "number", title: "Delay (in minutes) > 0:", required: false
-    }
-    section( "Notifications" ) {
-        input("recipients", "contact", title: "Send notifications to", required: false) {
-            input "phoneNumber", "phone", title: "Warn with text message (optional)", description: "Phone Number", required: false
-            input "pushNotification", "bool", title: "Push notification", required: false, defaultValue: "false"
-        }
-    }
+	page(name: "appSetup")
+}
+
+def appSetup() {
+dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
+		section("Select the door lock:") {
+			input "lock1", "capability.lock", required: true
+		}
+		section("Automatically lock the door when unlocked...") {
+			input "minutesLater1", "number", title: "Lock delay when unlocked for (in minutes):", required: true
+		}
+		section("Select the door contact sensor:") {
+			input "contact", "capability.contactSensor", required: false, submitOnChange: true
+		}
+		if (contact != null) {
+			section("Automatically lock the door when closed...") {
+				input "minutesLater2", "number", title: "Lock delay when closed for (in minutes) > 0:", required: true
+			}
+		}
+		section( "Notifications" ) {
+			input("recipients", "contact", title: "Send notifications to", required: false) {
+				input "phoneNumber", "phone", title: "Warn with text message (optional)", description: "Phone Number", required: false
+				input "pushNotification", "bool", title: "Push notification", required: false, defaultValue: "false"
+			}
+		}
+	}
 }
 
 def installed(){
