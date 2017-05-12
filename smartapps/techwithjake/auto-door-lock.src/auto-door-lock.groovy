@@ -44,9 +44,9 @@ dynamicPage(name: "appSetup", title: "Auto Lock Setup", install: true) {
 				input "pushNotification", "bool", title: "Send Push Notification", defaultValue: "false", required: false
 			}
 		}
-    section("Modes"){
-      input "modes", "mode", title: "Select a Mode(s)", multiple: true, required: false
-    }
+//    section("Modes"){
+//      input "modes", "mode", title: "Select a Mode(s)", multiple: true, required: false
+//    }
 	}
 }
 
