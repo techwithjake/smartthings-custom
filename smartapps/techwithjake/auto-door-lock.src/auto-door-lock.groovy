@@ -45,7 +45,7 @@ def appSetup() {
 			input "lock1", "capability.lock", required: true
 		}
 		section("Automatically lock the door when unlocked...") {
-			input "minutesLater1", "number", title: "Delay (in minutes):", required: true, submitOnChange: true
+			input "minutesLater1", "number", title: "Delay (in minutes):", required: true
 		}
 			if (minutesLater1 == 0) {
 				section ("Warning!") {
@@ -59,7 +59,7 @@ def appSetup() {
 		}
 			if (contact != null) {
 				section("Automatically lock the door when closed...") {
-					input "minutesLater2", "number", title: "Delay (in minutes):", required: true, submitOnChange: true
+					input "minutesLater2", "number", title: "Delay (in minutes):", required: true
 				}
 			}
 				if (minutesLater2 == 0) {
